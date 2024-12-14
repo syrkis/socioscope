@@ -4,15 +4,15 @@
 
 # Imports
 import asyncio
-import aiohttp
-import pandas as pd
 import datetime
 import os
-from tqdm.asyncio import tqdm
-from urllib.parse import urljoin
-from jax.experimental import sparse
-import jax.numpy as jnp
 from functools import partial
+from urllib.parse import urljoin
+import aiohttp
+import jax.numpy as jnp
+import pandas as pd
+from jax.experimental import sparse
+from tqdm.asyncio import tqdm
 
 # %% Constants
 BASE_URL = "https://wikimedia.org/"
@@ -63,15 +63,13 @@ i2a = {i: a for a, i in a2i.items()}
 
 # %%
 def day2vec(data, country, day):
-    return sparse.BCOO.fromdense(
+    return sparse.CSR.fromdense(
         jnp.zeros(len(a2i)).at[jnp.array([a2i[e["article"]] for e in data[country][day]])].set(1)
     )
 
 
 def plc2mat(data, country):
-    return sparse.bcoo_update_layout(
-        sparse.sparsify(jnp.stack)(list(map(partial(day2vec, data, country), data[country].keys()))), n_batch=0
-    )
+    return sparse.sparsify(jnp.stack)(list(map(partial(day2vec, data, country), data[country].keys())))
 
 
 def dat2mat(data):
@@ -80,12 +78,16 @@ def dat2mat(data):
 
 # %%
 # data.pop("FR")
-x = dat2mat(data)
-x.shape
-
+x = plc2mat(data, "US")
 # %%
-# sparse.sparsify(jnp.cov)(x).shape
+x.shape
+#
+# %%
 
+# print(dir(sparse))
+# sparse.dot
+x.shape
+# sparse.sparsify(jnp.dot)(x, x.T).shape
 
 # %%
 sparse.bcoo_dot_general(
