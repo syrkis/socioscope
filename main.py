@@ -10,6 +10,9 @@ import datetime
 import os
 from tqdm.asyncio import tqdm
 from urllib.parse import urljoin
+from jax.experimental import sparse
+import jax.numpy as jnp
+from functools import partial
 
 # %% Constants
 BASE_URL = "https://wikimedia.org/"
@@ -31,10 +34,7 @@ async def fetch_all_page_views(countries, dates):
     async with aiohttp.ClientSession() as session:
         results = {}
         for country in tqdm(countries, desc="Countries"):
-            tasks = {
-                date: asyncio.create_task(fetch_page_views(session, country, date))
-                for date in dates
-            }
+            tasks = {date: asyncio.create_task(fetch_page_views(session, country, date)) for date in dates}
             country_results = await asyncio.gather(*tasks.values())
             results[country] = dict(zip(tasks.keys(), country_results))
         return results
@@ -53,7 +53,41 @@ def load_wikitivity():
 
 
 # %% Main
-wikitivity = load_wikitivity()
+data = load_wikitivity()
 
 # %%
-[e["article"] for e in wikitivity["US"][pd.Timestamp("2024-01-01")]]
+# [e["article"] for e in wikitivity["US"][pd.Timestamp("2024-01-01")]]
+a2i = {a: i for i, a in enumerate(sorted(list(set([e["article"] for k, v in data["US"].items() for e in v]))))}
+i2a = {i: a for a, i in a2i.items()}
+
+
+# %%
+def day2vec(data, country, day):
+    return sparse.BCOO.fromdense(
+        jnp.zeros(len(a2i)).at[jnp.array([a2i[e["article"]] for e in data[country][day]])].set(1)
+    )
+
+
+def plc2mat(data, country):
+    return sparse.bcoo_update_layout(
+        sparse.sparsify(jnp.stack)(list(map(partial(day2vec, data, country), data[country].keys()))), n_batch=0
+    )
+
+
+def dat2mat(data):
+    return sparse.sparsify(jnp.stack)(list(map(partial(plc2mat, data), data.keys())))
+
+
+# %%
+# data.pop("FR")
+x = dat2mat(data)
+x.shape
+
+# %%
+# sparse.sparsify(jnp.cov)(x).shape
+
+
+# %%
+sparse.bcoo_dot_general(
+    x, sparse.bcoo_transpose(x, permutation=(0, 2, 1)), dimension_numbers=(([2], [1]), ([0], [0]))
+).shape
