@@ -790,6 +790,22 @@ files = [
 ]
 
 [[package]]
+name = "equinox"
+version = "0.11.10"
+description = "Elegant easy-to-use neural networks in JAX."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "equinox-0.11.10-py3-none-any.whl", hash = "sha256:ee6809e31664b92487b247f811fca48a2107f7ec958084b2294af2ee8a750e3b"},
+    {file = "equinox-0.11.10.tar.gz", hash = "sha256:f3e7d5545b71e427859a28050526d09adb6b20285c47476a606328a0b96c9509"},
+]
+
+[package.dependencies]
+jax = ">=0.4.13,<0.4.27 || >0.4.27"
+jaxtyping = ">=0.2.20"
+typing-extensions = ">=4.5.0"
+
+[[package]]
 name = "esch"
 version = "0.7.0"
 description = "esch (v.) : to turn matricies into high quality svg (animations)"
@@ -842,6 +858,40 @@ files = [
 
 [package.extras]
 devel = ["colorama", "json-spec", "jsonschema", "pylint", "pytest", "pytest-benchmark", "pytest-cache", "validictory"]
+
+[[package]]
+name = "flexcache"
+version = "0.3"
+description = "Saves and loads to the cache a transformed versions of a source object."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "flexcache-0.3-py3-none-any.whl", hash = "sha256:d43c9fea82336af6e0115e308d9d33a185390b8346a017564611f1466dcd2e32"},
+    {file = "flexcache-0.3.tar.gz", hash = "sha256:18743bd5a0621bfe2cf8d519e4c3bfdf57a269c15d1ced3fb4b64e0ff4600656"},
+]
+
+[package.dependencies]
+typing-extensions = "*"
+
+[package.extras]
+test = ["pytest", "pytest-cov", "pytest-mpl", "pytest-subtests"]
+
+[[package]]
+name = "flexparser"
+version = "0.4"
+description = "Parsing made fun ... using typing."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "flexparser-0.4-py3-none-any.whl", hash = "sha256:3738b456192dcb3e15620f324c447721023c0293f6af9955b481e91d00179846"},
+    {file = "flexparser-0.4.tar.gz", hash = "sha256:266d98905595be2ccc5da964fe0a2c3526fbbffdc45b65b3146d75db992ef6b2"},
+]
+
+[package.dependencies]
+typing-extensions = "*"
+
+[package.extras]
+test = ["pytest", "pytest-cov", "pytest-mpl", "pytest-subtests"]
 
 [[package]]
 name = "fonttools"
@@ -1283,6 +1333,29 @@ numpy = ">=1.24"
 scipy = ">=1.10"
 
 [[package]]
+name = "jaxscape"
+version = "0.0.2"
+description = ""
+optional = false
+python-versions = ">=3.8"
+files = []
+develop = false
+
+[package.dependencies]
+equinox = "*"
+jax = "*"
+lineax = "*"
+numpy = "*"
+sciparse = "*"
+tqdm = "*"
+
+[package.source]
+type = "git"
+url = "https://github.com/vboussange/jaxscape.git"
+reference = "HEAD"
+resolved_reference = "0e7bdcb359c1ffb15bd8dcc7a4987d1bcd018e98"
+
+[[package]]
 name = "jaxtyping"
 version = "0.2.36"
 description = "Type annotations and runtime checking for shape and dtype of JAX/NumPy/PyTorch/etc. arrays."
@@ -1328,6 +1401,26 @@ MarkupSafe = ">=2.0"
 
 [package.extras]
 i18n = ["Babel (>=2.7)"]
+
+[[package]]
+name = "jraph"
+version = "0.0.6.dev0"
+description = "Jraph: A library for Graph Neural Networks in Jax"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "jraph-0.0.6.dev0-py3-none-any.whl", hash = "sha256:350fe37bf717f934f1f84fd3370a480b3178bfcb61dfa217c738971308c57625"},
+    {file = "jraph-0.0.6.dev0.tar.gz", hash = "sha256:c3ac3a0b224b344eb6d367e8bc312d95ea41bf825d01ea31b80dd8c22c0dd8b8"},
+]
+
+[package.dependencies]
+jax = ">=0.1.55"
+jaxlib = ">=0.1.37"
+numpy = ">=1.18.0"
+
+[package.extras]
+examples = ["absl-py (>=0.9)", "dm-haiku (>=0.0.2)", "frozendict (>=2.0.2)", "optax (>=0.0.1)", "scipy (>=1.2.1)"]
+ogb-examples = ["absl-py (>=0.9)", "dm-haiku (>=0.0.2)", "dm-tree (>=0.1.5)", "optax (>=0.0.1)", "pandas (>=1.0.5)"]
 
 [[package]]
 name = "json5"
@@ -1735,6 +1828,23 @@ files = [
     {file = "kiwisolver-1.4.7-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:0c6c43471bc764fad4bc99c5c2d6d16a676b1abf844ca7c8702bdae92df01ee0"},
     {file = "kiwisolver-1.4.7.tar.gz", hash = "sha256:9893ff81bd7107f7b685d3017cc6583daadb4fc26e4a888350df530e41980a60"},
 ]
+
+[[package]]
+name = "lineax"
+version = "0.0.7"
+description = "Linear solvers in JAX and Equinox."
+optional = false
+python-versions = "~=3.9"
+files = [
+    {file = "lineax-0.0.7-py3-none-any.whl", hash = "sha256:c261977fd2104010ff34b7353deef22961da3ca46f341f158567dc2bbb8c2372"},
+    {file = "lineax-0.0.7.tar.gz", hash = "sha256:e43549a8d202432d4668afe54866741a0214ccb363487bacb2a980f72840ea48"},
+]
+
+[package.dependencies]
+equinox = ">=0.11.5"
+jax = ">=0.4.26"
+jaxtyping = ">=0.2.20"
+typing-extensions = ">=4.5.0"
 
 [[package]]
 name = "lxml"
@@ -2613,6 +2723,35 @@ typing = ["typing-extensions"]
 xmp = ["defusedxml"]
 
 [[package]]
+name = "pint"
+version = "0.24.4"
+description = "Physical quantities module"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "Pint-0.24.4-py3-none-any.whl", hash = "sha256:aa54926c8772159fcf65f82cc0d34de6768c151b32ad1deb0331291c38fe7659"},
+    {file = "pint-0.24.4.tar.gz", hash = "sha256:35275439b574837a6cd3020a5a4a73645eb125ce4152a73a2f126bf164b91b80"},
+]
+
+[package.dependencies]
+flexcache = ">=0.3"
+flexparser = ">=0.4"
+platformdirs = ">=2.1.0"
+typing-extensions = ">=4.0.0"
+
+[package.extras]
+babel = ["babel (<=2.8)"]
+bench = ["pytest", "pytest-codspeed"]
+dask = ["dask"]
+mip = ["mip (>=1.13)"]
+numpy = ["numpy (>=1.23)"]
+pandas = ["pint-pandas (>=0.3)"]
+test = ["pytest", "pytest-benchmark", "pytest-cov", "pytest-mpl", "pytest-subtests"]
+testbase = ["pytest", "pytest-benchmark", "pytest-cov", "pytest-subtests"]
+uncertainties = ["uncertainties (>=3.1.6)"]
+xarray = ["xarray"]
+
+[[package]]
 name = "platformdirs"
 version = "4.3.6"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
@@ -3299,6 +3438,25 @@ files = [
 ]
 
 [[package]]
+name = "sciparse"
+version = "0.1.24"
+description = "Python parser for Scientific datasets"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "sciparse-0.1.24-py3-none-any.whl", hash = "sha256:dfebb23d2eabd9bcc52da92a6661f51a61d06709fcc72d1daab5bd0aac7aeb1a"},
+    {file = "sciparse-0.1.24.tar.gz", hash = "sha256:e5a1d236e91155fda07d6d0c984b21a3759e4a4134346d752f3a71a0804e379e"},
+]
+
+[package.dependencies]
+matplotlib = ">=2.0.0"
+numpy = ">=1.14.5"
+pandas = ">=0.24.0"
+pint = ">=0.16.0"
+pyyaml = ">=5.1.1"
+scipy = ">=1.2.2"
+
+[[package]]
 name = "scipy"
 version = "1.14.1"
 description = "Fundamental algorithms for scientific computing in Python"
@@ -3819,4 +3977,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11,<3.12"
-content-hash = "ce12c1c1d5d437e215e52a45c9c7d5dfa865336c3c64a1533d8ab337889e4405"
+content-hash = "a91270b914741e2b2b6e43460d2bcf1639414e7e0c8fba6424779f7215d550d2"

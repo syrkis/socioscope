@@ -8,6 +8,8 @@ import datetime
 import os
 from functools import partial
 from urllib.parse import urljoin
+import jraph
+from jaxscape.gridgraph import GridGraph
 import aiohttp
 import jax.numpy as jnp
 import pandas as pd
@@ -54,17 +56,14 @@ def load_wikitivity():
 
 # %% Main
 data = load_wikitivity()
-
-# %%
-# [e["article"] for e in wikitivity["US"][pd.Timestamp("2024-01-01")]]
 a2i = {a: i for i, a in enumerate(sorted(list(set([e["article"] for k, v in data["US"].items() for e in v]))))}
 i2a = {i: a for a, i in a2i.items()}
 
 
 # %%
 def day2vec(data, country, day):
-    return sparse.CSR.fromdense(
-        jnp.zeros(len(a2i)).at[jnp.array([a2i[e["article"]] for e in data[country][day]])].set(1)
+    return sparse.COO.fromdense(
+        jnp.zeros((1, len(a2i))).at[0, jnp.array([a2i[e["article"]] for e in data[country][day]])].set(1)
     )
 
 
@@ -74,22 +73,3 @@ def plc2mat(data, country):
 
 def dat2mat(data):
     return sparse.sparsify(jnp.stack)(list(map(partial(plc2mat, data), data.keys())))
-
-
-# %%
-# data.pop("FR")
-x = plc2mat(data, "US")
-# %%
-x.shape
-#
-# %%
-
-# print(dir(sparse))
-# sparse.dot
-x.shape
-# sparse.sparsify(jnp.dot)(x, x.T).shape
-
-# %%
-sparse.bcoo_dot_general(
-    x, sparse.bcoo_transpose(x, permutation=(0, 2, 1)), dimension_numbers=(([2], [1]), ([0], [0]))
-).shape

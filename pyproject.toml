@@ -15,6 +15,9 @@ tqdm = "^4.67.1"
 jupyterlab = "^4.3.2"
 esch = "^0.7.0"
 jax-metal = "^0.1.1"
+jraph = "^0.0.6.dev0"
+jaxscape = {git = "https://github.com/vboussange/jaxscape.git"}
+equinox = "^0.11.10"
 
 
 [build-system]
