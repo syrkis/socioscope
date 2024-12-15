@@ -1,15 +1,36 @@
 # main.jl
 include("src/data.jl")
+using SparseArrays
 
-function main()
-    println("Fetching Wikipedia pageview data...")
+# Function to load or fetch data (only runs once)
+function load_data()
     data = data_fn()
-    println("Data fetching complete!")
-    # Unique articles in the US dataset
-    # map(x -> map(y -> y.article, x.articles) |> Set, values(data["US"])) |> x -> reduce(union, x)
-    return data
+    data
 end
 
-if abspath(PROGRAM_FILE) == @__FILE__
-    main()
+# Function to create vocabulary (can be rerun quickly)
+function create_vocab(data, country)
+    map(x -> map(y -> y.article, x.articles) |>
+             Set, values(data[country])) |>
+    x -> reduce(union, x) |>
+         collect |>
+         sort
+end
+
+# Analysis functions can go here...
+function create_dictionary(vocab)
+    a2i = Dict(a => i for (i, a) in enumerate(vocab))
+    i2a = Dict(i => a for (i, a) in enumerate(vocab))
+    a2i, i2a
+end
+
+
+function encode_day(data, country, date, a2i)
+    data[country][date].articles |> x -> map(y -> y.article, x) |> x -> map(y -> get(a2i, y, 0), x)
+end
+
+function encode_country(data, country, a2i)
+    keys(data[country]) |>
+    collect |>
+    x -> map(y -> encode_day(data, country, y, a2i), x)
 end

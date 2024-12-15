@@ -29,6 +29,7 @@ function fetch_page_views(country_code::String, date::Date)
     PageViewResponse(Vector{Any}(articles))
 end
 
+
 # Data Loading
 function data_fn()
     data_path = "data/wikitivity.jls"
