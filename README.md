@@ -1,0 +1,2 @@
+- [ ] graph representation
+- [ ] vis data
