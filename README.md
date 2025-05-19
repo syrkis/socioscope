@@ -1,2 +1,3 @@
+- [ ] Downloading all data
 - [ ] graph representation
 - [ ] vis data

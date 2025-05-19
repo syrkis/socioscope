@@ -1,5 +1,7 @@
 # %% Includes
-include("types.jl")
+include("socioscope/Types.jl")
+include("socioscope/Utils.jl")
+
 
 # %% Usings
 using DataFrames
@@ -13,33 +15,13 @@ using Serialization
 using SparseArrays
 
 # %% Constants
-DATE_RANGE = Date(2021, 1, 1):Day(1):today()-Day(2)
-COUNTRIES = ["FR", "US"]
+data = data_fn()
 
 
 # %%
-function url_fn(country_code::String, date::Date)
-    api_url = joinpath("https://wikimedia.org/", "api/rest_v1/metrics/pageviews/top-per-country/")
-    "$(api_url)$(country_code)/all-access/$(year(date))/$(lpad(month(date),2,'0'))/$(lpad(day(date),2,'0'))"
-end
 
-@memoize function fetch_fn(country_code::String, date::Date)  # memoize to not call api too much
-    headers = Dict("accept" => "application/json", "User-Agent" => "socioscope")
-    response = @async HTTP.get(url_fn(country_code, date), headers=headers)
-    articles = JSON3.read(fetch(response).body).items[1].articles
-    DailyStats([PageView(a.article, a.views_ceil, a.project) for a in articles], date)
-end
-
-function country_fn(country::String, date_range::StepRange{Date})
-    CountryStats(Dict(@showprogress "Fetching $country: " asyncmap(date -> date => fetch_fn(country, date), date_range)))
-end
-
-function data_fn()
-    map(country -> country => country_fn(country, DATE_RANGE), COUNTRIES)
-end
-
-country_fn("US", DATE_RANGE)
-
+reduce(vcat, [reduce(vcat, [[(a.name, a.wiki) for a in day] for day in values(country)]) for country in values(data)])
+# ((values(day) for day in values(country)) for country in values(data))
 # %% Functions
 function plc2mat(data, country, a2i)
     map(y -> day2vec(y, a2i), values(data[country].stats))
