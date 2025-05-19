@@ -1,4 +1,3 @@
-# %% Imports
 using Dates
 
 # %% Types
@@ -15,12 +14,4 @@ end
 
 struct CountryStats
     stats::Dict{Date,DailyStats}
-end
-
-struct WikiConfig
-    base_url::String
-    api_url::String
-    headers::Dict{String,String}
-    countries::Vector{String}
-    data_path::String
 end
