@@ -3,14 +3,14 @@ include("types.jl")
 
 # %% Usings
 using DataFrames
+using Dates
 using HTTP
-using Revise
 using JSON3
 using Memoize
 using ProgressMeter
+using Revise
 using Serialization
 using SparseArrays
-using Dates
 
 # %% Constants
 DATE_RANGE = Date(2021, 1, 1):Day(1):today()-Day(2)
@@ -23,14 +23,14 @@ function url_fn(country_code::String, date::Date)
     "$(api_url)$(country_code)/all-access/$(year(date))/$(lpad(month(date),2,'0'))/$(lpad(day(date),2,'0'))"
 end
 
-@memoize function fetch_fn(country_code::String, date::Date)
+@memoize function fetch_fn(country_code::String, date::Date)  # memoize to not call api too much
     headers = Dict("accept" => "application/json", "User-Agent" => "socioscope")
     response = @async HTTP.get(url_fn(country_code, date), headers=headers)
     articles = JSON3.read(fetch(response).body).items[1].articles
     DailyStats([PageView(a.article, a.views_ceil, a.project) for a in articles], date)
 end
 
-@memoize function country_fn(country::String, date_range::StepRange{Date})
+function country_fn(country::String, date_range::StepRange{Date})
     CountryStats(Dict(@showprogress "Fetching $country: " asyncmap(date -> date => fetch_fn(country, date), date_range)))
 end
 
@@ -38,7 +38,7 @@ function data_fn()
     map(country -> country => country_fn(country, DATE_RANGE), COUNTRIES)
 end
 
-# data_fn("US", DATE_RANGE)
+country_fn("US", DATE_RANGE)
 
 # %% Functions
 function plc2mat(data, country, a2i)
