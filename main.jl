@@ -1,27 +1,23 @@
-# %% Includes
-include("socioscope/Types.jl")
-include("socioscope/Utils.jl")
+# %% Imports
+import Pkg; Pkg.activate(".");
+include("socioscope/Types.jl"); include("socioscope/Utils.jl");
+using DataFrames, Plots, HTTP, JSON3, ProgressMeter, Revise, Serialization, SparseArrays, Graphs, CSV;
 
-
-# %% Usings
-using DataFrames
-using Dates
-using HTTP
-using JSON3
-using Memoize
-using ProgressMeter
-using Revise
-using Serialization
-using SparseArrays
-
-# %% Constants
-data = data_fn()
+# %%
+data = data_fn();
 
 
 # %%
+vocab = Set(reduce(vcat, [reduce(vcat, [[(a.wiki, a.name) for a in day] for day in values(country)]) for country in values(data)]))
+a2i = Dict(i => a for (a, i) in enumerate(vocab))
+i2a = Dict(i => a for (i, a) in enumerate(vocab));
 
-reduce(vcat, [reduce(vcat, [[(a.name, a.wiki) for a in day] for day in values(country)]) for country in values(data)])
-# ((values(day) for day in values(country)) for country in values(data))
+# function encode_fn()
+# end
+# tokid =
+# %% TODO: for now, make vector based on ollama embedding of project plus title.
+
+# https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=&explaintext=&titles=2000_Mexican_general_election&format=json
 # %% Functions
 function plc2mat(data, country, a2i)
     map(y -> day2vec(y, a2i), values(data[country].stats))

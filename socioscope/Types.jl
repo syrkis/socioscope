@@ -1,5 +1,3 @@
-using Dates
-
 # %% Types
 struct PageView
     name::String
@@ -7,11 +5,7 @@ struct PageView
     wiki::String
 end
 
-struct DailyStats
-    page::Vector{PageView}
-    date::Date
-end
-
-# struct CountryStats
-    # stats::Dict{Date,DailyStats}
+# struct DailyStats
+# page::Vector{PageView}
+# date::Date
 # end

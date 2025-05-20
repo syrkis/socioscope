@@ -3,7 +3,7 @@ using DataFrames
 using Dates
 using HTTP
 using JSON3
-using Memoize
+using Memoization
 using ProgressMeter
 using Revise
 using Serialization
@@ -28,6 +28,6 @@ end
 end
 
 # Return data for all countries (outter map) for all dates (inner asyncmap)
-function data_fn()
+@memoize function data_fn()
     Dict(map(country -> country => Dict(@showprogress "Fetching $country: " asyncmap(date -> date => fetch_fn(country, date), DATE_RANGE)), COUNTRIES))
 end
